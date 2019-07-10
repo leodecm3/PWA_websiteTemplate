@@ -1,3 +1,25 @@
+:: #################################################################
+:: #                                                               #
+:: #            THIS BLOCK WILL MADE A NEW VERSION  lm             #
+:: #                                                               #
+:: #################################################################
+:: version folder
+Set VersionCountLM=C:\SoAkiSemEsp\MyVersionControl\VersionCountLM.txt
+Set VersionLogLM=C:\SoAkiSemEsp\MyVersionControl\VersionLogLM.txt
+:: the code....
+for /f "delims=" %%x in (%VersionCountLM%) do set BuildVerLM=%%x
+set /a BuildVerLM=%BuildVerLM% + 1
+ECHO %BuildVerLM% > %VersionCountLM%
+ECHO ver- %BuildVerLM% _em %date% %time% _ %cd% >> %VersionLogLM%
+:: the new version number will be in %BuildVerLM% 
+ECHO A nova versao do agora eh: %BuildVerLM% 
+ECHO New version: %BuildVerLM% 
+:: ######################## FIM #######################################
+
+
+
+
+
 ::PRIMEIRAS LINHAS SAO PARA CRIAR OS DIAS, NAO APAGA
 @ECHO OFF
 :: Check WMIC is available
@@ -42,6 +64,7 @@ EXIT
 :: COMECA AQUI ------
 ECHO ON
 
+
 ::crio a pasta para publicar
 mkdir .\docs
 
@@ -49,10 +72,11 @@ mkdir .\docs
 ::xcopy ".\build" ".\docs" /e /y
 ::Robocopy ".\build" ".\docs" /MIR /PURGE
 
-Set defaultComment=%_yyyy% %_mm% %_dd% %_hour% %_minute% %_second%
+:: troquei para parar de mostrar a hora
+::Set defaultComment=%_yyyy% %_mm% %_dd% %_hour% %_minute% %_second%
+Set defaultComment=%_yyyy% %_mm% %_dd% _ %BuildVerLM%
 
 ::se quiser add algo no final, set /p comment=
-set comment=
 set comment= "%defaultComment% %comment%"
 
 :: ADD ALL
@@ -64,11 +88,37 @@ git commit -am %comment%
 ::manda para o alem
 git push origin master
 
-::abre
+ECHO OFF
+ECHO .
+ECHO .     DEU CERTO?
+ECHO .   enter    =  sai
+ECHO .   1 2 3    =  open_GitHub
+ECHO .    f       =  git push origin master --force
+ECHO .
+set /p opcao=
+
+
+if "%opcao%"=="1" goto open_GitHub
+if "%opcao%"=="2" goto open_GitHub
+if "%opcao%"=="3" goto open_GitHub
+
+if "%opcao%"=="f" goto force_GitHub
+
+
+::se apertar enter, ele chega aqui
+
+EXIT
+:open_GitHub
 start open_GitHub_of_this_repository.lnk
+EXIT
 
 
-
+EXIT
+:force_GitHub
+ECHO ON
+git push origin master --force
+PAUSE
+EXIT
 
 
 
@@ -85,7 +135,7 @@ exit
 
 
 
---antigo--------------------------------
+--antigo------------------------------------------------------------------------------------------------------------------------------------
 
 
 
