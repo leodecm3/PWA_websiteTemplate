@@ -1,0 +1,41 @@
+
+<!-- pwa fire bundle config file  
+Copy and paste this code to your index file, eg just before the end of the body tag
+or in the head tag in html5.
+-->
+
+<!-- register service worker -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker.js')
+    .then(function() { console.log("[ PWA Fire Bundle 🐹 ] Service Worker Registered"); });
+  }
+  
+  );
+}
+ </script>
+<!-- end of service worker -->
+
+<!-- using the web manifest.json
+Add a link tag to all the pages that encompass your web app, as follows;
+-->
+<!-- start of web manifest -->
+<link rel="manifest" href="app.webmanifest">
+
+<!-- theme-color 
+Also remember to add the theme color to all your pages as shown in the code below;
+-->
+ <meta name="theme-color" content="#fff" />
+<!-- end-theme-color -->
+
+<!-- add workbox window -->
+<script type="module">
+  import {Workbox} from 'https://storage.googleapis.com/workbox-cdn/releases/4.0.0/workbox-window.prod.mjs';
+
+   if ('serviceWorker' in navigator) {
+     const wb = new Workbox('/service-worker.js');
+     wb.register();
+     }
+</script>
+
