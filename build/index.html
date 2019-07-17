@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#005f97">
+
+  <!-- VERSAO DE TESTE!!!!!! NAO ATUALIZAR O APP -->
+  <!-- VERSAO DE TESTE!!!!!! NAO ATUALIZAR O APP -->
+  <!--Title-->  <!-- VERSAO DE TESTE!!!!!! NAO ATUALIZAR O APP -->
+  <title>rodou</title>
+
+  <!--Vue.js-->
+  <script src="js/vue.min.js"></script>
+  <!-- VERSAO DE TESTE!!!!!! NAO ATUALIZAR O APP -->
+  <!-- Favicon-->
+  <link rel="icon" type="image/png" href="img/iconAndroid.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="img/icon.png">
+
+  <!--Stylesheet-->
+  <link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+  <!-- VERSAO DE TESTE!!!!!! NAO ATUALIZAR O APP -->
+  <!--Manifest-->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- aqui o flutter -->
+  <script defer src="main.dart.js" type="application/javascript"></script>
+  <!-- VERSAO DE TESTE!!!!!! NAO ATUALIZAR O APP -->
+</head>
+
+<body>
+
+</body>
+
+<div id="app">
+  <h1 style="height: 7px;font-size:7px;color: white;">{{message}}</h1>
+</div>
+  <!-- VERSAO DE TESTE!!!!!! NAO ATUALIZAR O APP -->
+<!-- Update bar informartion-->
+<div id="snackbar">Versão Offline atualizada com sucesso.</div>
+
+<script>
+
+  new Vue({
+    el: '#app',
+    data: {
+      message: 'APP Versão TESTEE'
+    }
+  });
+</script>
+
+<script>
+
+  let newWorker;
+
+  function showUpdateBar() {
+    let snackbar = document.getElementById('snackbar');
+    snackbar.className = 'show';
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js').then(reg => {
+      reg.addEventListener('updatefound', () => {
+        // A wild service worker has appeared in reg.installing!
+        newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          // Has network.state changed?
+          switch (newWorker.state) {
+            case 'installed':
+              if (navigator.serviceWorker.controller) {
+                // new update available
+                showUpdateBar();
+                newWorker.postMessage({ action: 'skipWaiting' });
+              }
+              // No update available
+              break;
+          }
+        });
+      });
+    });
+
+    let refreshing;
+
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (refreshing) return;
+      window.location.reload();
+      refreshing = true;
+    });
+  }
+</script>
+
+</html>
